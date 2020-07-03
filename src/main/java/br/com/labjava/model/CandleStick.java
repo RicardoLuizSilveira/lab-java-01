@@ -24,7 +24,7 @@ public final class CandleStick {
 
 	private void validar(LocalDateTime data, Double abertura) {
 		if (data == null)
-			throw new IllegalArgumentException("A data não pode ser nula");
+			throw new IllegalArgumentException("ERRO-04: A data não pode ser nula");
 		if (abertura == null)
 			throw new IllegalArgumentException("ERRO-05: O valor da abertura não pode ser nulo");
 	}

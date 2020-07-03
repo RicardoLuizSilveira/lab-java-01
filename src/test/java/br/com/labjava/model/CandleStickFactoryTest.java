@@ -1,16 +1,18 @@
 package br.com.labjava.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 
-import br.com.labjava.model.builders.CandlestickBuilder;
-
+@RunWith(JUnitPlatform.class)
 public class CandleStickFactoryTest {
 
 	@Test
@@ -79,7 +81,7 @@ public class CandleStickFactoryTest {
 		CandleStickFactory factory = new CandleStickFactory();
 		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
 		
-		assertTrue("O candlestick não era de alta", candleStick.isAlta());
+		assertTrue(candleStick.isAlta(), "O candlestick não era de alta");
 		
 	}
 	
@@ -93,7 +95,7 @@ public class CandleStickFactoryTest {
 		CandleStickFactory factory = new CandleStickFactory();
 		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
 		
-		assertTrue("O candlestick não era de baixa", candleStick.isBaixa());
+		assertTrue(candleStick.isBaixa(), "O candlestick não era de baixa");
 		
 	}
 	

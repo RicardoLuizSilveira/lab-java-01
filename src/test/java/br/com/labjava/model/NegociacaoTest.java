@@ -1,31 +1,44 @@
 package br.com.labjava.model;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.time.LocalDateTime;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 
+@RunWith(JUnitPlatform.class)
 public class NegociacaoTest {
 
 	LocalDateTime data = LocalDateTime.now();
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testPrecoNaoPodeSerNegativo() {
-		new Negociacao(-1.0, 1, data);
+		assertThrows(IllegalArgumentException.class, 
+					() -> new Negociacao(-1.0, 1, data),
+					"Should throw IllegalArgumentException but didn't");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testQuantidadeNaoPodeSerNegativa() {
-		new Negociacao(1.0, -1, data);
+		assertThrows(IllegalArgumentException.class, 
+				() -> new Negociacao(1.0, -1, data),
+				"Should throw IllegalArgumentException but didn't");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testQuantidadeNaoPodeSerZero() {
-		new Negociacao(1.0, 0, data);
+		assertThrows(IllegalArgumentException.class, 
+				() -> new Negociacao(1.0, 0, data),
+				"Should throw IllegalArgumentException but didn't");
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testDataNaoPodeSerNula() {
-		new Negociacao(1.0, 1, null);
+		assertThrows(IllegalArgumentException.class, 
+				() -> new Negociacao(1.0, 1, null),
+				"Should throw IllegalArgumentException but didn't");
 	}
 
 }
