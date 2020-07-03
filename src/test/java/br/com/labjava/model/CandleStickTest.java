@@ -3,95 +3,40 @@ package br.com.labjava.model;
 import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Test;
 
+import br.com.labjava.model.builders.CandlestickBuilder;
+
 public class CandleStickTest {
 
-	@Test
-	public void testBasicoVariasNegociacoes() {
-		LocalDateTime data = LocalDateTime.now();
-		Negociacao n1 = new Negociacao(40.0, 10, data);
-		Negociacao n2 = new Negociacao(20.0, 10, data);
-		Negociacao n3 = new Negociacao(10.0, 10, data);
-		Negociacao n4 = new Negociacao(50.0, 10, data);
-		List<Negociacao> negociacoes = Arrays.asList(n1, n2, n3, n4);
-		
-		CandleStickFactory factory = new CandleStickFactory();
-		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
-		
-		assertEquals(40.0, candleStick.getAbertura(), 0.0001);
-		assertEquals(50.0, candleStick.getFechamento(), 0.0001);
-		assertEquals(50.0, candleStick.getMaximo(), 0.0001);
-		assertEquals(10.0, candleStick.getMinimo(), 0.0001);
-		assertEquals(1200.0, candleStick.getVolume(), 0.0001);
-		
+	@Test(expected = IllegalArgumentException.class)
+	public void testDataNaoPodeSerNula() {
+		new CandlestickBuilder()
+				.setAbertura(40.0)
+				.setFechamento(20.0)
+				.setMaximo(60.0)
+				.setMinimo(10.0)
+				.setData(null)
+				.setVolume(600.0)
+				.build();
 	}
 	
 	@Test
-	public void testUmaUnicaNegociacao() {
-		LocalDateTime data = LocalDateTime.now();
-		Negociacao n1 = new Negociacao(40.0, 10, data);
-		List<Negociacao> negociacoes = Arrays.asList(n1);
-		
-		CandleStickFactory factory = new CandleStickFactory();
-		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
-		
-		assertEquals(40.0, candleStick.getAbertura(), 0.0001);
-		assertEquals(40.0, candleStick.getFechamento(), 0.0001);
-		assertEquals(40.0, candleStick.getMaximo(), 0.0001);
-		assertEquals(40.0, candleStick.getMinimo(), 0.0001);
-		assertEquals(400.0, candleStick.getVolume(), 0.0001);
-		
+	public void testValorAberturaNaoPodeSerNula() {
+		try {
+			new CandlestickBuilder()
+			.setAbertura(null)
+			.setFechamento(20.0)
+			.setMaximo(60.0)
+			.setMinimo(10.0)
+			.setData(LocalDateTime.now())
+			.setVolume(600.0)
+			.build();
+			fail("Deveria ter lancado uma exception: ERRO-05");
+		} catch (Exception e) {
+			assertTrue("A exception não continha o erro ERRO-05", e.getMessage().contains("ERRO-05"));
+		}
 	}
-	
-	@Test
-	public void testZeroNegociacoes() {
-		LocalDateTime data = LocalDateTime.now();
-		List<Negociacao> negociacoes = new ArrayList<Negociacao>();
-		
-		CandleStickFactory factory = new CandleStickFactory();
-		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
-		
-		assertEquals(0.0, candleStick.getAbertura(), 0.0001);
-		assertEquals(0.0, candleStick.getFechamento(), 0.0001);
-		assertEquals(0.0, candleStick.getMaximo(), 0.0001);
-		assertEquals(0.0, candleStick.getMinimo(), 0.0001);
-		assertEquals(0.0, candleStick.getVolume(), 0.0001);
-		
-		assertTrue(!candleStick.isAlta());
-		assertTrue(!candleStick.isBaixa());
-		
-	}
-	
-	@Test
-	public void testCandlestickDeAlta() {
-		LocalDateTime data = LocalDateTime.now();
-		Negociacao n1 = new Negociacao(20.0, 10, data);
-		Negociacao n2 = new Negociacao(40.0, 10, data);
-		List<Negociacao> negociacoes = Arrays.asList(n1, n2);
-		
-		CandleStickFactory factory = new CandleStickFactory();
-		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
-		
-		assertTrue("O candlestick não era de alta", candleStick.isAlta());
-		
-	}
-	
-	@Test
-	public void testCandlestickDeBaixa() {
-		LocalDateTime data = LocalDateTime.now();
-		Negociacao n1 = new Negociacao(20.0, 10, data);
-		Negociacao n2 = new Negociacao(10.0, 10, data);
-		List<Negociacao> negociacoes = Arrays.asList(n1, n2);
-		
-		CandleStickFactory factory = new CandleStickFactory();
-		CandleStick candleStick = factory.montaCandleStick(negociacoes, data);
-		
-		assertTrue("O candlestick não era de baixa", candleStick.isBaixa());
-		
-	}
+
 }
